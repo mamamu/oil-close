@@ -1,4 +1,5 @@
 const React = require('react');
+const PlanVisit = require('./PlanVisit')
 
 
 const VenueList = function( {objectArray} ) {
@@ -6,7 +7,7 @@ const VenueList = function( {objectArray} ) {
     <div>
       <ul>
         {objectArray.map(function(item, i) {
-        return <li key={i}>{item.name + " - "+item.headcount}</li>;
+        return <li key={item.id}>{item.name + " - "+item.headcount} <PlanVisit id={item.id} /></li>;
       })}
       </ul>
       

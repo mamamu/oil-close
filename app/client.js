@@ -1,7 +1,8 @@
+//rewritten and ready to delete  remove refs
 // currently jquery.  have set up webpack/react basic model for rewrite
 // client-side js
 // run by the browser each time your view template is loaded
-
+/*
 
 
 $(function() {
@@ -21,7 +22,7 @@ function showPosition(position) {
   httpGetAsync('/search?'+ $.param({lat:position.coords.latitude, long:position.coords.longitude}), listDisplay);
   }
   } )
-  
+ */ 
 /*
   $('form').submit(function(event) {     
     event.preventDefault();
@@ -33,7 +34,7 @@ function showPosition(position) {
            
   });
   */
-  
+/*  
   function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
@@ -44,7 +45,7 @@ function showPosition(position) {
     xmlHttp.open("POST", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
- /* 
+ 
  //logit function for testing delete when not needed
   function logit(ret){
     var data=JSON.parse(ret);    
@@ -53,7 +54,7 @@ function showPosition(position) {
       $('input').focus();
   }
   */
-  
+  /*
   function listDisplay(ret){    
     var data=JSON.parse(ret);
     data.forEach(function(item){      
@@ -65,3 +66,4 @@ function showPosition(position) {
   
 
 });
+*/

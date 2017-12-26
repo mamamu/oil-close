@@ -20,6 +20,7 @@ app.get("/", yelp.gettoken, function (req, res) {
 
 app.get('/test', function (req, res){
   console.log("in test")
+  console.log(req.query.id)
   res.send("OK")
 });
 
@@ -28,6 +29,8 @@ app.get("/search", yelp.searchapi, data.checkall, function (req, res) {
   console.log(req.bizlist);
   res.send(req.bizlist);    
 });
+
+
 
 // Simple in-memory store for now
 var appts = [

@@ -12,14 +12,14 @@ class VenueGeolocate extends React.Component {
     this.state={ data: [], location: "" }
   } 
   
-componentDidMount() {  
+componentDidMount() { 
   this.position = navigator.geolocation.getCurrentPosition(
     (position)=>{
       this.setState({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 
-    
+   
       })
     
   axios.get('/search', {params:{
@@ -45,11 +45,13 @@ componentDidMount() {
   }
 
   componentWillUnmount() {
-
+    //localStorage.setItem( 'location', this.state.location );
   }
   
   updateLocation(e){
-    this.setState({      
+    this.setState({ 
+      latitude: undefined,
+      longitude: undefined,
       location: e.target.value      
     });
   }
@@ -90,10 +92,8 @@ componentDidMount() {
           { //conditional display for user accepted geolocation and has coords in state and location equals empty string (this erases coord data once you start typing as state updates at once)
           hasCoords!==false &&  location &&
             <span>Latitude {this.state.latitude}, Longitude {this.state.longitude} </span> 
-          } </p>
-        
-        <p>{this.state.location}</p>
-        <Link to='/login'>Login Here</Link>
+          } <span>{this.state.location}</span></p> 
+        <p><Link to='/login'>Login Here for Your Night Out </Link></p>
         <VenueList objectArray={this.state.data} />
       </div>
     )

@@ -10,12 +10,13 @@
 
 body {
   font-family: helvetica, arial, sans-serif;
-  margin: 25px;
+  margin: 5% 10%;
+  background: url(https://images.freeimages.com/images/large-previews/dd7/disco-balls-1478176.jpg) center center fixed;
 }
 
 h1 {
   font-weight: bold;
-  color: pink;
+  color: navy;
 }
 
 .bold {
@@ -26,17 +27,37 @@ h1 {
   display: none;
 }
 
+.venues {  
+  max-width: 650px;
+  box-shadow: 20px 2px 150px 150px rgba(206, 139, 115, 0.8);
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+li {
+  background-color: black;
+  color: white;
+  list-style-type: none;
+  padding: 1% 5%;
+  width: 95%;
+  margin-bottom: 5px;
+  border: 2px solid #cd8b73;
+  border-radius: 5px;
+}
+
 p {
+  margin-left:10px;
+  padding: 1%;
   max-width: 600px;
 }
 
 form {  
   padding: 15px;
-  background-color: cyan;
+  background-color: black;
+  color: white;
   display: inline-block;  
-  max-width: 450px;
-  border-radius: 3px;
-  margin-left: 50px;
+  width: 100%;
+  border-radius: 5px 5px 0px 0px;  
 }
 
 input {
@@ -67,7 +88,7 @@ button:active {
 }
 
 li {
-  margin-bottom: 5px;
+  
 }
 
 footer {
