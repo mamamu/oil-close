@@ -11,11 +11,4 @@ const temp = require('./client');
 
 
 ReactDOM.render((
-  <BrowserRouter>
-    <div>
-      <Route exact path="/" component={HelloWorld}/>
-      <Route path="/login" component={LoginPage} />     
-      
-      
-    </div>
-  </BrowserRouter>), document.getElementById('venuediv'));
+  <HelloWorld />), document.getElementById('venuediv'));

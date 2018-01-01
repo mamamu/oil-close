@@ -9,7 +9,7 @@ module.exports={
     
     if (client==undefined){
       yelp.accessToken(clientId, clientSecret).then(response => {
-      console.log(response.jsonBody);    
+      //console.log(response.jsonBody);    
       client = yelp.client(response.jsonBody.access_token);
       next();
       });
@@ -26,8 +26,9 @@ module.exports={
       longitude: req.query.long,      
     };
 
-  console.log(searchRequest);
-  client.search(searchRequest).then(response => {    
+  //console.log(searchRequest);
+  client.search(searchRequest).then(response => {  
+    
     req.bizlist=response.jsonBody.businesses;
     next();
 }).catch(e => {
