@@ -5,16 +5,22 @@
 }
 
 body {
-  font-family: helvetica, arial, sans-serif;
-  margin: 5% 10%;
+  font-family: helvetica, arial, sans-serif;  
   background: url(https://res.cloudinary.com/db8ctqbcb/image/upload/v1514384250/disco-balls-1478176_i26hgg.jpg) center center fixed;
 }
 
+
+
+
 h1 {
+  
   font-weight: bold;
   color: navy;
 }
 
+.main{
+  padding-right:1em;
+}
 
 
 .bold {
@@ -59,8 +65,8 @@ li {
   color: white;
   list-style-type: none;
   padding: 1% 5%;
-  width: 95%;
-  height: auto;
+  width: 98%;
+  height: auto;  
   margin-bottom: 5px;
   border: 2px solid #cd8b73;
   border-radius: 5px;
@@ -69,12 +75,17 @@ li {
 .ListItem {
   background-color: black;
   color: white;  
-  padding: 1% 5%;
-  width: 95%;
+  padding: 1% 5%;  
   margin-bottom: 5px;
   border: 2px solid #cd8b73;
   border-radius: 5px;
 }
+
+.name{
+  width: 60%;
+}
+
+
 
 p {
   margin-left:10px;
@@ -100,13 +111,12 @@ input {
   font-size: 16px;
 }
 
-button {
-  
-  font-size: 16px;
+button {  
+  font-size: small;
   border-radius: 3px;
   background-color: lightgrey;
   border: 1px solid grey;
-  box-shadow: 2px 2px teal;
+  box-shadow: .125em .125em teal;
   cursor: pointer;
 }
 
@@ -120,6 +130,10 @@ button:active {
 
 .ButtonSelected {
   background-color: #f4df66;
+}
+
+.NotSelected {
+  background-color: lightgrey;
 }
 
 .Disabled {
@@ -144,8 +158,18 @@ footer > a {
   float: right;
 }
 
-span .headcountcontainer {  
-  padding: 10px;
-  margin-right: 40px;  
+.headcount {
+  font-size: small;
 }
 
+span .headcountcontainer { 
+  width:20%;
+  padding: 10px;
+  margin-right: 20px;  
+}
+
+@media (min-width: 650px) { 
+  body{
+    margin: 5% 10%;
+  }
+}

@@ -12,32 +12,27 @@ class LoginUser extends React.Component {
   }
   
   componentDidMount() { 
-    //maybe move this higher and pass as props?
-      axios.get('/user')
-  .then((response)=> {
+    
+  axios.get('/user')
+    .then((response)=> {
       console.log(response.data)
-        var userinfo=response.data;
-   this.setState (
-     {userLoggedIn: userinfo.isLoggedIn,
-      username: userinfo.username
-      
-      
-      })
-      
-  })  
-  .catch(function (error) {
-    console.log(error);
-  });
+      var userinfo=response.data;
+       this.setState ({
+          userLoggedIn: userinfo.isLoggedIn,
+          username: userinfo.username
+          })
+    })  
+    .catch(function (error) {
+      console.log(error);
+    });
   }
   
   componentWillUnmount(){
   }
   
   handleClick(e){
-    console.log(e);
-    localStorage.clear();
-    
-    
+    //when we logout we also want to clear the localStorage to get rid of any location settings
+    localStorage.clear();  
   }
     
   render(){ 
@@ -47,19 +42,18 @@ class LoginUser extends React.Component {
         <span className='login'>
           {this.state.userLoggedIn===false &&
             <span>
-        <span className='loginlink'><a href="/login/google">Login with Google
-  </a></span>
-        <span className='loginlink'><a href="/login/twitter">Login with Twitter
-          </a></span></span>}
+              <span className='loginlink'><a href="/login/google">Login with Google</a></span>
+              <span className='loginlink'><a href="/login/twitter">Login with Twitter</a></span>
+            </span>}
           {this.state.userLoggedIn===true &&
             <span>
-        <span className='usermessage'>Hello {this.state.username}!</span><span className='loginlink right'><a onClick={this.handleClick} href='/logout'>Logout</a></span>
-              </span>
+              <span className='usermessage'>Hello {this.state.username}!</span><span className='loginlink right'><a onClick={this.handleClick} href='/logout'>Logout</a></span>
+            </span>
         }
         </span>
 
-        </div>
-        <VenueGeolocate userLoggedIn={this.state.userLoggedIn} />
+      </div>
+      <VenueGeolocate userLoggedIn={this.state.userLoggedIn} />
       </div>
     );
   }

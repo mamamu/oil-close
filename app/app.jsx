@@ -6,9 +6,8 @@ const hashHistory = require('react-router-dom').hashHistory;
 
 /* Import Components */
 const HelloWorld = require('./components/HelloWorld');
-const LoginPage = require('./components/LoginPage')
-const temp = require('./client');
+
 
 
 ReactDOM.render((
-  <HelloWorld />), document.getElementById('venuediv'));
+  <HelloWorld />), document.getElementById('maindiv'));

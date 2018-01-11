@@ -1,11 +1,4 @@
-<!-- This is a static file -->
-<!-- served from your routes in server.js -->
 
-<!-- You might want to try something fancier: -->
-<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
-<!-- pug: https://pugjs.org/ -->
-<!-- haml: http://haml.info/ -->
-<!-- hbs(handlebars): http://handlebarsjs.com/ -->
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +9,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
@@ -30,22 +26,13 @@
         <div id="demo">
           
         </div>
-        <!--
-      <button id="geolocate" >Allow This Site to View Location</button>
-
-      <form>
-        <input name="location" id="loc" type="text">
-        <input type="submit" value="submit"> 
-      </form>-->
+        
       </navbar>
       <section class="venues">
-        <div id="venuediv">
+        <div id="maindiv">
           
         </div>
         
-        <ul id="venuelist">
-          
-        </ul>
       </section>
     </main>
 
@@ -55,12 +42,7 @@
       </p>
     </footer>
 
-    <!-- Your web-app is https, so your scripts need to be too -->
-    <!--currently works without jquery  see how this goes
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
-            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
-            crossorigin="anonymous"></script>
-  -->
+    
 <script type="text/javascript" src="/bundle.js"></script>
   </body>
 </html>

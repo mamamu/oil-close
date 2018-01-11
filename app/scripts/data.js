@@ -6,17 +6,21 @@ module.exports={
       {user:3, id:'brink-brewing-cincinnati', created_at:1512314160891}
 ];
     //working to check entire list if thats the way I go.
-    req.bizlist.forEach(function(biz){
-      var id=biz.id;
-      biz.headcount=0;
-      appts.forEach(function(appt){      
+    req.array.forEach(function(item){
+      var id=item.id;
+      item.headcount=0;
+      
+      /*
+      appts.forEach(function(appt){ 
+        
       if (appt.id===id){
         //console.log(id)
-        biz.headcount+=1;
+        item.headcount+=1;
       } else {
-        biz.headcount+=0;
+        item.headcount+=0;
       }
-    })
+      */
+    //})
    
   })
    next();

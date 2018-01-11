@@ -23,7 +23,7 @@ Todos,
   - listdisplay (api) 👍
   - toggle (db) 👍 (have base component for toggle still need to wire up to db once it's in)
   - headcount (db) need to write component and db function, think this one needs to be updated on a timeout function.  make sure nothing left in toggle since doing this sep. now 👍   
-  - headcount done with timer, not 100 percent happy--look into server push maybe better.
+  - headcount updates now done with server sent event on main (VenueGeolocate.jsx) and passed down through props, old timer code still in there, just commented out 👍
   
  api access middleware
   - clean up the api data, only need id, name, maybe link out to Yelp here, or maybe nothing else
@@ -35,6 +35,7 @@ Todos,
   - user page interaction 
     - same page login component complete ✔️
     - need to figure out how to access user in react. ✔️ (just needed to know if logged in-passed to component through props)
+    -non logged in error message in case /going (appt) route fails due to lack of user
 
  db
  - design (what user info do I need, anything to keep track of other than appts.) complete ✔️
@@ -47,7 +48,7 @@ Todos,
 
 - best way to display results (results are the combined set of api and db info)probably looking at toggle for you going, put headcount in separate component ✔️
 
-- work on display issues on smallest screen-bootstrap fix for this?
+- work on display issues on smallest screen-bootstrap fix for this?✔️
 
 - cleanup and refactor
 

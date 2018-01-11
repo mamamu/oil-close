@@ -8,13 +8,11 @@ module.exports={
   gettoken:function(req, res, next){
     
     if (client==undefined){
-      yelp.accessToken(clientId, clientSecret).then(response => {
-      //console.log(response.jsonBody);    
+      yelp.accessToken(clientId, clientSecret).then(response => {        
       client = yelp.client(response.jsonBody.access_token);
       next();
       });
-    } else {
-      //console.log("still here");
+    } else {      
       next();
     }
   },
@@ -26,7 +24,7 @@ module.exports={
       longitude: req.query.long,      
     };
 
-  //console.log(searchRequest);
+  
   client.search(searchRequest).then(response => {  
     
     req.bizlist=response.jsonBody.businesses;

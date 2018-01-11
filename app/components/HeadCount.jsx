@@ -6,11 +6,13 @@ class HeadCount extends React.Component {
     super(props); 
     this.id=this.props.id;
     this.headcount=this.props.headcount
-    //this.handleClick = this.handleClick.bind(this); 
-    //this.state={ headcount: 0 }
+    this.count=this.props.count
+    
   }
   
   componentDidMount() { 
+    
+   
     
   }
   
@@ -18,10 +20,12 @@ class HeadCount extends React.Component {
   }
   
   render(){
+    
+ var hasChanged=(this.props.count>0)
  
   
   return(
-  <span className='headcountcontainer' key={this.props.id} ><span className='headcount' > {this.props.headcount} are going   </span>  </span>
+    <span className='headcountcontainer' key={this.props.id} ><span className='headcount' >{hasChanged && this.props.count}  {!hasChanged && this.props.headcount} <img src="https://res.cloudinary.com/db8ctqbcb/image/upload/v1515447459/icon_chsxxb.jpg" width="25px" />   </span>  </span>
   )
 }
   

@@ -7,6 +7,7 @@ class PlanVisit extends React.Component {
   constructor(props){    
     super(props);     
     this.id=this.props.id;
+    this.count=this.props.count
     this.userLoggedIn=this.props.userLoggedIn
     this.handleClick = this.handleClick.bind(this); 
     this.state={ going: false, headcount: 0, appt_time: null }
@@ -14,14 +15,29 @@ class PlanVisit extends React.Component {
   
   componentDidMount() {
     //get initial is user going data from database and set state
+    if (this.userLoggedIn===true){
     axios.get('/userGoing', {params:{
     id: this.id}})
-  .then((response)=>{
-      //console.log(response.data)
+  .then((response)=>{      
       this.setState({going:response.data})
     }).catch(function(error){
     })
+    }
     
+  axios.get('/headcount',{params:{
+    id: this.id}})
+  .then((response)=>{      
+      this.setState({headcount:response.data.headcount})
+    }).catch(function(error){
+    });
+    
+
+    
+    
+  
+    
+    /*
+    //headcount update has been moved to VenueGeolocate and is now passed down in props.  delete this soon
     //get headcount for this, pass it in props to the headcount component
     //currently updating this on a two minute cycle
     axios.get('/headcount',{params:{
@@ -43,12 +59,13 @@ class PlanVisit extends React.Component {
       120000
     );
 
-    
+   */ 
     
     
   }
   componentWillUnmount(){
-    clearInterval(this.timerID);
+    //delete this too when deleting stuff on coponent did mount
+    //clearInterval(this.timerID);
   }
   
    handleClick(e) {      
@@ -64,10 +81,11 @@ class PlanVisit extends React.Component {
   }
   })
   .then((response)=> {
+    //right here, you'll get a date or an error message if the person needs to log in.
       console.log(response.data)
    this.setState (
       {going: !this.state.going,
-       appt_time: response.data
+       appt_time: response.data       
       })
     axios.get('/headcount',{params:{
     id: this.id}})
@@ -90,26 +108,24 @@ class PlanVisit extends React.Component {
   */ 
   }
 render(){
+  //something to look at here when theres time.  on ff and chrome on the computer, buttons work fine, but on phone button which has been 
+  //classed "ButtonSelected" turns yellow, but does not turn back to grey when "NotSelected", even though text changes.
   var userisLoggedIn=(this.props.userLoggedIn===true);
   
   var buttontext="Going!";
   var buttonClass="Disabled";
-  
-  if (this.state.going===false){
-    buttontext="Go Here";
-    buttonClass="Normal";
-  }
+ 
   if (!userisLoggedIn){
     buttonClass="Disabled";
   } else if (userisLoggedIn&&this.state.going===false){
-    buttontext="Go Here";
-    buttonClass="Normal";
+    buttontext="Go";
+    buttonClass="NotSelected";
   } else {
     buttonClass="ButtonSelected";
   }
   
   return(
-  <div className='right' key={this.props.id} >  <HeadCount id={this.props.id} headcount={this.state.headcount} />
+  <div className='right' key={this.props.id} >  <HeadCount id={this.props.id} headcount={this.state.headcount} count={this.props.count} />
       <button className={buttonClass} onClick={this.handleClick}>{buttontext}</button>  </div>
   )
 }

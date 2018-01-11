@@ -24,7 +24,7 @@ module.exports = function(passport, db) {
         passport.authenticate('google', { scope: ['profile', 'email'] }));
       
       app.get(returnPath, 
-        passport.authenticate('google', { failureRedirect: '/login' }),
+        passport.authenticate('google', { failureRedirect: '/' }),
         function(req, res) {
           res.redirect('/');
         });

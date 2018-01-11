@@ -10,11 +10,31 @@ class VenueGeolocate extends React.Component {
     this.userLoggedIn=this.props.userLoggedIn;
     this.handleClick = this.handleClick.bind(this);  
     //this.handleLocationChange=this.handleLocationChange.bind(this);
-    this.state={ data: [], location: "" }
+    this.state={ data: [], location: "", updateArray:[] }
   } 
-///local storage is working well, but need override logic for when someone uses geolocate if you want to keep that in.  
-  //updating state to clear out old requests also seems appropriate here to prevent confusion.
-componentDidMount() {   
+
+componentDidMount() {  
+  
+  
+  
+  /*
+  //this is a timer based server poll to get changes in headcount, it's superceeded by the server sent event listener at the bottom
+  //of the component.  Holding onto the code for now jic its useful for some reason or I need to back out of the sse model.
+  //update every 2 mins right now
+  this.timerID = setInterval( () => { 
+    axios.get('/headupdate')
+    .then((response)=>{      
+      if (typeof(response.data)!=="string"){
+          this.setState({
+            updateArray: response.data,
+          })
+      }
+    }).catch(function(error){console.log(error)})
+  },120000)
+  
+  */
+  
+  ///local storage checks to get most recent location
   if (localStorage.getItem('localstoragelocation')!==null){    
   axios.get('/search', {params:{
     location: localStorage.getItem('localstoragelocation')
@@ -41,17 +61,15 @@ componentDidMount() {
            latitude: localStorage.getItem('latitude'),
            longitude: localStorage.getItem('longitude'),
            data: response.data,    
-      })
-    
+      })    
   })  
   .catch(function (error) {
     console.log(error);
-  });
-    
+  });    
   }
   else {
-    //local storage length is 0 when page is newly loaded after logout, not sure if I need
-    console.log(window.localStorage.length)
+    //local storage length is 0 when page is newly loaded after logout, not sure if I need a check/works fine w/o 
+    //console.log(window.localStorage.length) jic I need for something else
   //geolocation here for when nothing in local storage
   this.position = navigator.geolocation.getCurrentPosition(
     (position)=>{
@@ -75,17 +93,33 @@ componentDidMount() {
      this.setState({
                 data: response.data,    
       })
-    //console.log(response.data);
+    
   })  
   .catch(function (error) {
     console.log(error);
   });
   
-      })
+  })
   
   }
+  var evtsource = new EventSource('/api/head');
+
+  evtsource.addEventListener('headcount', (e) => {    
+    var data=JSON.parse(e.data);
+    //console.log(data);
+    //incoming data will be an array of objects.
+    if (typeof(data)!=="string"){
+    this.setState({
+            updateArray: data,
+          })
+    }
+     }, false);
+     
+ 
 }
   componentWillUnmount() {
+    //goes with the commented out timer above in DidMount
+    //clearInterval(this.timerID);
     
   }
   
@@ -105,6 +139,7 @@ componentDidMount() {
   }
   })
   .then((response)=> {
+        console.log(response.data)
      this.setState({
                 data: response.data,    
       })    
@@ -122,8 +157,9 @@ componentDidMount() {
     const location = this.state.location==="";
     
     
+    
     return(
-      <div> 
+      <div >
         <form>
         <label>Enter location:</label>
           <input value={this.state.location} onChange={e => this.updateLocation(e)}></input>
@@ -136,7 +172,8 @@ componentDidMount() {
             <span>Latitude {this.state.latitude}, Longitude {this.state.longitude} </span> 
           } <span>{this.state.location}</span></p> 
         
-        <VenueList objectArray={this.state.data} userLoggedIn={this.props.userLoggedIn} />
+        <VenueList objectArray={this.state.data} userLoggedIn={this.props.userLoggedIn} updateArray={this.state.updateArray} />
+          
       </div>
     )
   }
