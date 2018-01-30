@@ -13,27 +13,9 @@ module.exports = function (db) {
       // session.
       app.use(passport.initialize());
       app.use(passport.session());
-/*
-//login has its own component
-      app.get('/login',
-        function(req, res){
-          res.render('login.html', { title: 'Login' });
-        });
- */ 
-      // setup the routes necessary for each provider
-      //local.routes(app);
+
       google.routes(app);
-      twitter.routes(app);
-      
-      // list the json of each user in the system (including passwords for local users)
-      app.get('/auth/db/users', function(req, res) {
-        var users = db.users.fetch();
-        res.render('auth/users.html', {
-          title: 'Users',
-          users: users.map(function(user) {
-            return JSON.stringify(user);
-          })});
-      });
+      twitter.routes(app);  
       
       app.get('/logout',
         function(req, res){

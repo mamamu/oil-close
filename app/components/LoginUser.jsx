@@ -14,8 +14,7 @@ class LoginUser extends React.Component {
   componentDidMount() { 
     
   axios.get('/user')
-    .then((response)=> {
-      console.log(response.data)
+    .then((response)=> {      
       var userinfo=response.data;
        this.setState ({
           userLoggedIn: userinfo.isLoggedIn,
@@ -23,7 +22,7 @@ class LoginUser extends React.Component {
           })
     })  
     .catch(function (error) {
-      console.log(error);
+      console.error(error);
     });
   }
   

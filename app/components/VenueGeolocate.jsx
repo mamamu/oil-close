@@ -10,16 +10,14 @@ class VenueGeolocate extends React.Component {
     this.userLoggedIn=this.props.userLoggedIn;
     this.handleClick = this.handleClick.bind(this);  
     //this.handleLocationChange=this.handleLocationChange.bind(this);
-    this.state={ data: [], location: "", updateArray:[] }
+    this.state={ data: [], location: "", updateArray:[] , offset: 0}
   } 
 
 componentDidMount() {  
   
-  
-  
-  /*
   //this is a timer based server poll to get changes in headcount, it's superceeded by the server sent event listener at the bottom
-  //of the component.  Holding onto the code for now jic its useful for some reason or I need to back out of the sse model.
+  //of the component, but I'm keeping it in due to the sse often disconnecting and not reconnecting on Firefox.  This will at least keep the page 
+  //somewhat up to date.  Belt and suspenders.
   //update every 2 mins right now
   this.timerID = setInterval( () => { 
     axios.get('/headupdate')
@@ -32,17 +30,19 @@ componentDidMount() {
     }).catch(function(error){console.log(error)})
   },120000)
   
-  */
+  
   
   ///local storage checks to get most recent location
   if (localStorage.getItem('localstoragelocation')!==null){    
   axios.get('/search', {params:{
-    location: localStorage.getItem('localstoragelocation')
-  }
+    location: localStorage.getItem('localstoragelocation'),
+    offset: localStorage.getItem('localstorageoffset') 
+    }
   })
   .then((response)=> {
      this.setState({
                location: localStorage.getItem('localstoragelocation'),
+               offset: localStorage.getItem('localstorageoffset'),
                 data: response.data,    
       })    
   })  
@@ -53,13 +53,15 @@ componentDidMount() {
   else if (localStorage.getItem('latitude')!==null){
   axios.get('/search', {params:{
     lat: localStorage.getItem('latitude'),
-    long: localStorage.getItem('longitude')
+    long: localStorage.getItem('longitude'),
+    offset: localStorage.getItem('localstorageoffset')
   }
   })
   .then((response)=> {
      this.setState({
            latitude: localStorage.getItem('latitude'),
            longitude: localStorage.getItem('longitude'),
+           offset: localStorage.getItem('localstorageoffset'),
            data: response.data,    
       })    
   })  
@@ -67,9 +69,7 @@ componentDidMount() {
     console.log(error);
   });    
   }
-  else {
-    //local storage length is 0 when page is newly loaded after logout, not sure if I need a check/works fine w/o 
-    //console.log(window.localStorage.length) jic I need for something else
+  else {    
   //geolocation here for when nothing in local storage
   this.position = navigator.geolocation.getCurrentPosition(
     (position)=>{
@@ -81,19 +81,20 @@ componentDidMount() {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 location: ""
+              
    
       })
     
   axios.get('/search', {params:{
     lat: position.coords.latitude,
-    long: position.coords.longitude
+    long: position.coords.longitude,
+    offset: this.state.offset
   }
   })
   .then((response)=> {
      this.setState({
                 data: response.data,    
-      })
-    
+      })    
   })  
   .catch(function (error) {
     console.log(error);
@@ -102,11 +103,12 @@ componentDidMount() {
   })
   
   }
+  
+  //server sent event stuff here
   var evtsource = new EventSource('/api/head');
 
   evtsource.addEventListener('headcount', (e) => {    
-    var data=JSON.parse(e.data);
-    //console.log(data);
+    var data=JSON.parse(e.data);    
     //incoming data will be an array of objects.
     if (typeof(data)!=="string"){
     this.setState({
@@ -116,30 +118,49 @@ componentDidMount() {
      }, false);
      
  
-}
-  componentWillUnmount() {
-    //goes with the commented out timer above in DidMount
-    //clearInterval(this.timerID);
+  }
+  
+  componentWillUnmount() {   
     
   }
   
   updateLocation(e){
+    
     this.setState({ 
       latitude: undefined,
       longitude: undefined,
-      location: e.target.value      
+      location: e.target.value, 
+      offset: 0
     });
+    localStorage.removeItem('latitude');
+    localStorage.removeItem('longitude');
   }
   
   handleClick(e) {           
     e.preventDefault(); 
+    var text=e.target.text    
+    var os=parseInt(this.state.offset)  
+    
+    if (text==="Next"){
+       os+=20
+    }
+    else if (text==="Previous"){
+      os-=20
+    } else {
+      os=0
+    }
+    
+    this.setState({offset:os});  
+    localStorage.setItem( 'localstorageoffset', os );
+    if (this.state.longitude===undefined){
     localStorage.setItem( 'localstoragelocation', this.state.location );
+    
       axios.get('/search', {params:{
-    location: this.state.location
+    location: this.state.location,        
+        offset: os
   }
   })
-  .then((response)=> {
-        console.log(response.data)
+  .then((response)=> {        
      this.setState({
                 data: response.data,    
       })    
@@ -147,6 +168,23 @@ componentDidMount() {
   .catch(function (error) {
     console.log(error);
   });
+    }else {
+    axios.get('/search', {params:{
+    lat: this.state.latitude,
+    long: this.state.longitude,
+    offset: os
+  }
+  })
+  .then((response)=> {
+     this.setState({
+                data: response.data,    
+      })
+    
+  })  
+  .catch(function (error) {
+    console.log(error);
+  });
+    }
    
   }
   
@@ -155,6 +193,10 @@ componentDidMount() {
   render(){
     const hasCoords = (this.state.latitude!==undefined)
     const location = this.state.location==="";
+    var hrefClass=""
+    if (this.state.offset===0){
+      hrefClass="is-not-clickable"
+    }
     
     
     
@@ -173,7 +215,7 @@ componentDidMount() {
           } <span>{this.state.location}</span></p> 
         
         <VenueList objectArray={this.state.data} userLoggedIn={this.props.userLoggedIn} updateArray={this.state.updateArray} />
-          
+         <a className={hrefClass} href="#" onClick={this.handleClick}>Previous</a>   <a href="#" onClick={this.handleClick}>Next</a> 
       </div>
     )
   }

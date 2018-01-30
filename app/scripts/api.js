@@ -17,7 +17,12 @@ module.exports={
     }
   },
   searchapi:function(req, res, next){
+    var offset=0
+    if (req.query.offset!==undefined){
+      offset=req.query.offset;
+    }    
     const searchRequest = {
+      offset: offset,
       term:'bar',
       location: req.query.location,
       latitude: req.query.lat,
@@ -25,7 +30,7 @@ module.exports={
     };
 
   
-  client.search(searchRequest).then(response => {  
+  client.search(searchRequest).then(response => { 
     
     req.bizlist=response.jsonBody.businesses;
     next();

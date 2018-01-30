@@ -10,8 +10,7 @@ module.exports = function(passport, db) {
       callbackURL: 'https://'+process.env.PROJECT_DOMAIN+'.glitch.me' + returnPath,
       
     },
-    function(accessToken, refreshToken, profile, cb) {
-    //console.log(profile)
+    function(accessToken, refreshToken, profile, cb) {    
       db.findOrCreate(profile, function (err, user) {
         return cb(err, user);
       });

@@ -31,11 +31,10 @@ module.exports =
   });
 },
   findOrCreate: function(profile, cb) {
-    //console.log(profile)
+   
   process.nextTick(function () {
     User.findOne({ 'profile_id': profile.id }, function(err, user){
-      if (err){
-        //console.log("error searching db")
+      if (err){        
         return cb(err);
       }
       if (user) {
@@ -74,25 +73,25 @@ module.exports =
   cancelAppt: function(req, res){
     var midnight=moment().startOf('day');
     var breakfast=midnight.subtract(10, 'hours');
-    //console.log(req.user._id);
+    
     Appt.findOne({user_id:req.user._id, venue_id:req.query.id, created_at:{$gt: breakfast}}, function(err, record){
       if (err){console.log(err)}       
       record.remove();
       res.send("deleted")
-    })
-    //user:req.user, venue_id:req.query.id, created_at:req.query.created_at
-    
+    })    
   },
+  //this searches for headcount of specific venue by id  
   //current cut off is universal and based on gmt  ()
   headCount: function(req, res){    
     var midnight=moment().startOf('day');
     var breakfast=midnight.subtract(10, 'hours');    
     Appt.count({venue_id:req.query.id, created_at: {$gt: breakfast}}, function(err, count){
-      if (err){console.log(err)}
-      //console.log(count)      
+      if (err){console.log(err)}           
       res.send({headcount: count})
     })
   },
+  //this is a search using an array of items which have been updated and is passed back to the venueGeolocate component
+  //this is NOT the sse function
     headCountUpdate: function(req, res, next){
       //first check if theres anything to update, otherwise just status 200
       if (req.array!==undefined){
@@ -118,17 +117,16 @@ module.exports =
         })
       } 
       }
-    else {  
-      
+    else { 
       res.sendStatus(200)
       }
   },
+  //this is the function to update headcount using sse
   countUpdate: function(req, res){
-    //any records that have been changed are passed in the req.array from the server where there's a running list of the last 
+    //any records that have been changed are passed in the req.array from the server where there's a running list of the last 30 secs or so
       //first check if theres anything to update, then check db for each to update count and save array w/updated count
     //then continue the sseWriteData that started over on the server
-    var event = 'headcount';
-    console.log(req.array)
+    var event = 'headcount';    
       if (req.array!==undefined){
       if (req.array.length>0){
         var array=req.array;      
@@ -143,11 +141,9 @@ module.exports =
           Promise.then(function(count){ 
             retObj.count=count;        
             retArr.push(retObj);
-            if (retArr.length===array.length)  { 
-              //req.retArr(retArr); 
+            if (retArr.length===array.length)  {                
               var data=retArr      
-              sse.writeSSEData(req, res, event, data)
-              //return retArr;
+              sse.writeSSEData(req, res, event, data)              
             }
           }).catch(function(err){
             console.error(err)
@@ -155,70 +151,11 @@ module.exports =
         })
       } 
       }
-    else {  
-      //next()
-      console.log("no data")
-      //res.sendStatus(200)
+    else {        
+      console.log("no data");      
       }
   },
-  writeCountUpdate: function(req, res){
-      //first check if theres anything to update, otherwise just status 200
-    var event = 'headcount';
-  
-  
-    //sse.writeSSEHead(req, res, function(req, res) { 
-      //sse.writeSSEData(req, res, event, "None", function(req, res) {
-        var intervalx = setInterval(function() { 
-          //console.log("inside")
-          //console.log(headToChange)
-          //if have something in array here, can we search db (promise) .then sse.writeData?
-          //can we pass sse/use sse in db/index? and send from there?
-          //req.array=headToChange;
-          //console.log(req.array);
-          
-          //db.writeCountUpdate(req, res);
-            var data="data here"       
-            sse.writeSSEData(req, res, event, data)            
-         
-        }, 10000);
-        
-        req.connection.addListener("close", function() {
-            clearInterval(intervalx);
-        });
-      //});
-    //});
-    /*
-    var event="headcount"
-    if (req.array!==undefined){
-      if (req.array.length>0){
-        var array=req.array;      
-        var retArr=[];
-        var midnight=moment().startOf('day');
-        var breakfast=midnight.subtract(10, 'hours')
-       
-        array.forEach(function(venue){       
-          var retObj={}
-          retObj.id=venue.id;      
-          var Promise=Appt.count({venue_id:venue.id, created_at: {$gt: breakfast}}).exec()
-          Promise.then(function(count){ 
-            retObj.count=count;        
-            retArr.push(retObj);
-            if (retArr.length===array.length)  { 
-              sse.writeSSEData(req, res, event, retArr)   
-              
-            }
-          }).catch(function(err){
-            console.error(err)
-          }) 
-        })
-      } 
-    }
-    else {  
-      console.log("no data to send")
-      //res.sendStatus(200)
-      }
-      */
-  },
+
   userGoingHere: function(req, res){
     var midnight=moment().startOf('day');
     var breakfast=midnight.subtract(10, 'hours')

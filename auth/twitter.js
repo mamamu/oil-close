@@ -4,26 +4,16 @@ module.exports = function(passport, db) {
       path = '/login/twitter',
       returnPath = path + '/return';
   
-  // Configure the Facebook strategy for use by Passport.
-  //
-  // OAuth 2.0-based strategies require a `verify` function which receives the
-  // credential (`accessToken`) for accessing the Facebook API on the user's
-  // behalf, along with the user's profile.  The function must invoke `cb`
-  // with a user object, which will be set at `req.user` in route handlers after
-  // authentication.
+ 
   passport.use(new Strategy({
       consumerKey: process.env.TWITTER_KEY,
       consumerSecret: process.env.TWITTER_SECRET,
-      callbackURL: 'https://'+process.env.PROJECT_DOMAIN+'.glitch.me' + returnPath,
-      // your app needs explicit permission from Twitter to actually get an email back
-      // see https://dev.twitter.com/rest/reference/get/account/verify_credentials
-      includeEmail: false,
-      // Twitter returns plenty of info if you want it
+      callbackURL: 'https://'+process.env.PROJECT_DOMAIN+'.glitch.me' + returnPath,      
+      includeEmail: false,      
       includeStatus: false,
       includeEntities: false
     },
-    function(token, tokenSecret, profile, cb) {
-      console.log(profile);
+    function(token, tokenSecret, profile, cb) {      
       db.findOrCreate(profile, function (err, user) {
         return cb(err, user);
       });
