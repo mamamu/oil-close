@@ -34,8 +34,8 @@ app.get("/login", function (req, res) {
   res.send(error);     
 });
 
-//get the yelp token on first load of index and store it
-app.get("/", yelp.gettoken, function (req, res) {    
+//index  --removed yelp token call from here as it's no longer needed 
+app.get("/", function  (req, res) {    
   res.sendFile(__dirname + '/app/index.html');
 });
 

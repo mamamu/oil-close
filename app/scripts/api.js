@@ -1,21 +1,26 @@
 
 const yelp = require('yelp-fusion');
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.SECRET; 
-var client;
+//const clientId = process.env.CLIENT_ID;
+//const clientSecret = process.env.SECRET; 
+const apiKey = process.env.YELP_API;
+var client = yelp.client(apiKey);
 
 module.exports={
-  gettoken:function(req, res, next){
+  //no longer need clientId and call to get a token--now yelp is doing api keys
+  
+  //gettoken:function(req, res, next){
     
-    if (client==undefined){
-      yelp.accessToken(clientId, clientSecret).then(response => {        
-      client = yelp.client(response.jsonBody.access_token);
-      next();
-      });
-    } else {      
-      next();
-    }
-  },
+    //if (client==undefined){
+      //new--yelp now has api keys and we don't need to get an access token
+      //yelp.accessToken(clientId, clientSecret).then(response => {          
+      //lient = yelp.client(response.jsonBody.access_token);
+      //client = yelp.client(apiKey);
+      //next();
+      
+    //} else {      
+      //next();
+    //}
+  //},
   searchapi:function(req, res, next){
     var offset=0
     if (req.query.offset!==undefined){
